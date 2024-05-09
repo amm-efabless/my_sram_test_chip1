@@ -4,7 +4,43 @@
 
 This is an OpenLane-1.x-based example of using an Efabless Marketplace IP packge, installed using `ipm`.
 
-Specifically, it demonstrates use of the EFSRAM_01024x032_008_18 high-density SRAM IP.
+Specifically, it demonstrates use of the commercial EFSRAM_01024x032_008_18 high-density SRAM IP.
+
+This repo was made from https://github.com/efabless/caravel_user_project originally and then adapted with guidance from the similar project: https://github.com/efabless/caravel_user_sram
+
+To build the GDS in this repo:
+
+1.  Install IPM:
+    ```bash
+    cd ~
+    git clone https://github.com/efabless/IPM.git
+    pip install ./IPM
+    # Test:
+    ipm ls-remote
+    ```
+2.  Clone this repo:
+    ```bash
+    git clone https://github.com/amm-efabless/my_sram_test_chip1
+    ```
+3.  Setup your enviroment (installs OpenLane, PDK, etc):
+    ```bash
+    cd my_sram_test_chip1
+    make setup
+    ```
+4.  Install the EFSRAM IP:
+    ```
+    ipm install-dep
+    ```
+    NOTE: At the time of writing, this might require special access to private repos for some IPs (including EFSRAM). This is expected to change as some IPs become officially published. For more info, see: https://github.com/efabless/IPM
+5.  Harden the example `wishbone_sram` macro (which includes the SRAM hard IP):
+    ```
+    make wishbone_sram
+    ```
+    NOTE: At the time of writing, expect some minor linter errors about shorted ports, and 1 DRC violation.
+6.  Harden the `user_project_wrapper`
+    ```
+    make user_project_wrapper
+    ```
 
 
 ## Basic Caravel User Project guides
