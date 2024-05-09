@@ -1,8 +1,8 @@
-CARAVEL_ROOT: /usr/caravel_user_project/caravel
-MCW_ROOT: /usr/caravel_user_project/mgmt_core_wrapper
+CARAVEL_ROOT: /home/anton/WORK/demo/my_sram_test_chip1/caravel
+MCW_ROOT: /home/anton/WORK/demo/my_sram_test_chip1/mgmt_core_wrapper
 PDK: sky130A
-PDK_ROOT: /usr/pdk
-USER_PROJECT_ROOT: /usr/caravel_user_project
+PDK_ROOT: /home/anton/WORK/demo/my_sram_test_chip1/dependencies/pdks
+USER_PROJECT_ROOT: /home/anton/WORK/demo/my_sram_test_chip1
 caravan: false
 clk: 25
 emailto:

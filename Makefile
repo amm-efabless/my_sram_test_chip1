@@ -37,14 +37,15 @@ ifeq ($(ROOTLESS), 1)
 endif
 export OPENLANE_ROOT?=$(PWD)/dependencies/openlane_src
 export PDK_ROOT?=$(PWD)/dependencies/pdks
+export IPM_ROOT?=$(PWD)/dependencies/ipm
 export DISABLE_LVS?=0
 
 export ROOTLESS
 
 ifeq ($(PDK),sky130A)
 	SKYWATER_COMMIT=f70d8ca46961ff92719d8870a18a076370b85f6c
-	export OPEN_PDKS_COMMIT?=78b7bc32ddb4b6f14f76883c2e2dc5b5de9d1cbc
-	export OPENLANE_TAG?=2023.07.19-1
+	export OPEN_PDKS_COMMIT?=bdc9412b3e468c102d01b7cf6337be06ec6e9c9a
+	export OPENLANE_TAG?=2024.04.22
 	MPW_TAG ?= mpw-9i
 
 ifeq ($(CARAVEL_LITE),1)
@@ -230,7 +231,17 @@ update_caravel: check-caravel
 uninstall:
 	rm -rf $(CARAVEL_ROOT)
 
+ipm: check_dependencies
+	if [ -d "$(IPM_ROOT)" ]; then\
+		echo "Deleting exisiting $(IPM_ROOT)" && \
+		rm -rf $(IPM_ROOT) && sleep 2;\
+	fi
+	git clone https://github.com/efabless/ipm.git $(IPM_ROOT)
+	cd $(IPM_ROOT)
+	pip install .
 
+ip: ipm
+	ipm install-dep
 # Install Pre-check
 # Default installs to the user home directory, override by "export PRECHECK_ROOT=<precheck-installation-path>"
 .PHONY: precheck
