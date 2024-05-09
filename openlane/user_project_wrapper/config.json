@@ -26,7 +26,7 @@
 
     "QUIT_ON_MAGIC_DRC": false,
     "QUIT_ON_KLAYOUT_DRC": false,
-
+    "MAGIC_DRC_USE_GDS": true,
 
     "BASE_SDC_FILE": "dir::base_user_project_wrapper.sdc",
     "IO_SYNC": 0,
