@@ -5,7 +5,7 @@
         "dir::../../ip/EFSRAM_01024x032_008_18/hdl/ram_controller.v",
         "dir::../../ip/EFSRAM_01024x032_008_18/hdl/EFSRAM_1024x32_wrapper.v"
     ],
-    "SYNTH_DEFINES": ["USE_PG_PIN", "PnR"],
+    "SYNTH_DEFINES": ["PnR"],
     "CLOCK_PERIOD": 25,
     "CLOCK_PORT": "wb_clk_i",
     "FP_SIZING": "absolute",
@@ -24,8 +24,8 @@
     "PL_ROUTABILITY_DRIVEN": true,
     "GRT_ALLOW_CONGESTION": true,
     "GRT_ADJUSTMENT": 0,
-    "//RUN_POST_GRT_DESIGN_REPAIR": true,
-    "//RUN_POST_GRT_RESIZER_TIMING": true,
+    "GLB_RESIZER_DESIGN_OPTIMIZATIONS": true,
+    "GLB_RESIZER_TIMING_OPTIMIZATIONS": true,
     "GRT_REPAIR_ANTENNAS": false,
     "MAGIC_DRC_USE_GDS": true,
     "QUIT_ON_MAGIC_DRC": false,
@@ -62,10 +62,10 @@
     "FP_PDN_VPITCH": 50,
     "FP_PDN_HPITCH": 50,
     "FP_PDN_MACRO_HOOKS": [
-        "SRAM_0 vpwra vgnd  vccd1 vssd1",
-        "SRAM_0 vpb   vnb   vccd1 vssd1",
-        "SRAM_0 vpwrp vgnd  vccd1 vssd1",
-        "SRAM_0 vpwrm vgnd  vccd1 vssd1"
+        "SRAM_0 vccd1 vssd1 vpwra vgnd",
+        "SRAM_0 vccd1 vssd1 vpb   vnb ",
+        "SRAM_0 vccd1 vssd1 vpwrp vgnd",
+        "SRAM_0 vccd1 vssd1 vpwrm vgnd"
     ],
     "//SYNTH_USE_PG_PINS_DEFINES": "USE_POWER_PINS",
     "GRT_OBS": [
@@ -76,7 +76,7 @@
         "met5 0 40 314 435"
     ],
 
-    "////FP_PDN_CHECK_NODES": true,
-    "////QUIT_ON_PDN_VIOLATIONS": false,
-    "////FP_PDN_ENABLE_RAILS": false
+    "//FP_PDN_CHECK_NODES": true,
+    "//QUIT_ON_PDN_VIOLATIONS": false,
+    "//FP_PDN_ENABLE_RAILS": false
 }
