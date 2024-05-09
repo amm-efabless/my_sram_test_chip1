@@ -23,9 +23,9 @@
 
 // This could be used as the basis for making a more-sophisticated Wishbone mux.
 
-`ifdef USE_POWER_PINS
-  `define USE_PG_PIN 
-`endif
+// `ifdef USE_POWER_PINS
+//   `define USE_PG_PIN 
+// `endif
 
 module wishbone_sram (
 `ifdef USE_POWER_PINS
@@ -69,14 +69,20 @@ module wishbone_sram (
   // "*_wbs_cycle" inputs using an "always @(*)" block with a case
   // statement sensitive to various bit patterns on wbs_adr_i.
 
-  // Instantiate the soft (Verilog) Efabless-supplied Wishbone wrapper
-  // that is provided as one of the interfaces to the SRAM hard IP block.
-  // This in turn includes a WB RAM controller & actual SRAM IP.
-  SRAM_1024x32 my_4k_sram (
-  `ifdef USE_POWER_PINS
-    .VPWR       (vccd1),
-    .VGND       (vssd1),
-  `endif
+  // The code below is MOSTLY as-is from the Efabless
+  // ip/EFSRAM_01024x32_008_18/hdl/SRAM_1024x32.v reference design...
+
+  // RAM ports that connect between ram_controller and SRAM_0:
+  wire [31:0]   DO;
+  wire [31:0]   DI;
+  wire [31:0]   BEN;
+  wire  [9:0]   AD;
+  wire          EN;
+  wire          R_WB;
+  wire          CLKin;
+
+  // Wishbone-to-SRAM controller interface:
+  ram_controller #(.AW(10)) ram_controller(
     // These are "gated" (or muxed) Wishbone signals specifically
     // for THIS device on the Wishbone bus:
     .wbs_cyc_i  (sram_wbs_cycle),
@@ -90,7 +96,46 @@ module wishbone_sram (
     .wbs_we_i   (wbs_we_i),
     .wbs_sel_i  (wbs_sel_i),
     .wbs_dat_i  (wbs_dat_i),
-    .wbs_adr_i  (wbs_adr_i)
+    .wbs_adr_i  (wbs_adr_i),
+    // These are the signals that bridge to the SRAM_0 macro:
+    .DO         (DO),
+    .DI         (DI),
+    .BEN        (BEN),
+    .AD         (AD),
+    .EN         (EN),
+    .R_WB       (R_WB),
+    .CLKin      (CLKin)
+  );
+
+  // Wrapper for the EFSRAM hard IP macro, instantiated as "SRAM_0":
+  EFSRAM_1024x32_wrapper SRAM_0 (
+  `ifdef USE_POWER_PINS
+    .vgnd       (vssd1),
+    .vnb        (vssd1),
+    .vpb        (vccd1),
+    .vpwra      (vccd1),
+    .vpwrm      (vccd1),
+    .vpwrp      (vccd1),
+  `endif
+    .vpwrac     (1'b1),
+    .vpwrpc     (1'b1),
+    // access ports
+    .DO         (DO),
+    .DI         (DI),
+    .BEN        (BEN),
+    .AD         (AD),
+    .EN         (EN),
+    .R_WB       (R_WB),
+    .CLKin      (CLKin),
+    // scan ports
+    .TM         (1'b0),
+    .SM         (1'b0),
+    .ScanInCC   (1'b0),
+    .ScanInDL   (1'b0),
+    .ScanInDR   (1'b0),
+    .ScanOutCC  (),
+    .WLBI       (1'b0),
+    .WLOFF      (1'b0)
   );
 
 endmodule
